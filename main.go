@@ -19,6 +19,17 @@ type Config struct {
 	Dirs   []string `json:"dirs"`
 }
 
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
+
 const configExample = `{
   "style": "WebKit",
   "filter": [
@@ -39,7 +50,13 @@ func main() {
 	var configPath string
 	flag.StringVar(&configPath, "c", "", "format config path. if the param is empty, would create a example config.")
 	flag.Parse()
-
+	exist, err := PathExists("./format.json")
+	if err != nil {
+		panic(err)
+	}
+	if exist {
+		configPath = "format.json"
+	}
 	if configPath == "" {
 		fmt.Println("param config is empty, create a example config...")
 		f, err := os.Create("./format.json")
@@ -86,7 +103,7 @@ func main() {
 		}
 	}
 
-	err := ClangFormat(config.Style, files)
+	err = ClangFormat(config.Style, files)
 	if err != nil {
 		fmt.Println(err)
 	}
