@@ -157,7 +157,7 @@ func GetDirsList(paths []string) []string {
 
 func ClangFormat(style string, paths []string) error {
 	files := strings.Join(paths, " ")
-	command := fmt.Sprintf("clang-format -i --style=%s %s", style, files)
+	command := fmt.Sprintf("clang-format -i --style=%s %s", style, files) + " --verbose"
 	fmt.Println("command:", command)
 	var cmd *exec.Cmd
 	if runtime.GOOS == "windows" {
@@ -168,6 +168,7 @@ func ClangFormat(style string, paths []string) error {
 		fmt.Println("runtime os is linux, use bash")
 		cmd = exec.Command("/bin/bash", "-c", command)
 	}
+	cmd.Stderr = os.Stderr
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		fmt.Println("create stdout pipe fail!")
