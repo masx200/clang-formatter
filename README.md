@@ -48,3 +48,9 @@ example config is created!
 ```
 $ ./clang-formatter -c ./format.json
 ```
+
+## 安装
+
+```bash
+go install github.com/masx200/clang-formatter@latest
+```
