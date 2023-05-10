@@ -166,7 +166,7 @@ func ClangFormat(style string, paths []string) error {
 		//cmd = exec.Command("cmd.exe", "/c", "start"+command)
 	} else {
 		fmt.Println("runtime os is linux, use bash")
-		cmd = exec.Command("/bin/bash", "-c", command)
+		cmd = exec.Command("bash", "-c", command)
 	}
 	cmd.Stderr = os.Stderr
 	stdout, err := cmd.StdoutPipe()
